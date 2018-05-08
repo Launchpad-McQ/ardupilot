@@ -1578,8 +1578,10 @@ void QuadPlane::motors_output(void)
         float new_throttleRight = SRV_Channels::get_output_scaled(SRV_Channel::k_throttleRight)*0.01f;
 
         //mask = 11 (right). mask = 12 (left). Ruining masks.
-        motors->output_motor_mask(new_throttleLeft, 12);
-        motors->output_motor_mask(new_throttleRight, 11);
+        uint8_t maskLeft = 12;
+        uint8_t maskRight = 11;
+        motors->output_motor_mask(new_throttleLeft, maskLeft);
+        motors->output_motor_mask(new_throttleRight, maskRight);
         }
 }
 
