@@ -503,6 +503,12 @@ bool QuadPlane::setup(void)
         SRV_Channels::set_default_function(CH_11, SRV_Channel::k_motor7);
         AP_Param::set_frame_type_flags(AP_PARAM_FRAME_TRICOPTER);
         break;
+    case AP_Motors::MOTOR_FRAME_DODECAHEXA:
+    for (uint8_t i=0; i<12; i++) {
+        SRV_Channels::set_aux_channel_default(SRV_Channels::get_motor_function(i), CH_1+i);
+    }
+        break;
+
     case AP_Motors::MOTOR_FRAME_TAILSITTER:
         break;
     default:

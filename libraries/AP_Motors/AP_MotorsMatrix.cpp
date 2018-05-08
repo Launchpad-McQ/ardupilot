@@ -606,6 +606,23 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                     add_motor(AP_MOTORS_MOT_12,  -30, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 12); // forward-left-bottom
                     success = true;
                     break;
+                case MOTOR_FRAME_TYPE_DT:
+                    // ocelot12
+                    add_motor(AP_MOTORS_MOT_1,    51,   51, 0, 1);
+                    add_motor(AP_MOTORS_MOT_2,   -51,  -51, 0, 12);
+                    add_motor(AP_MOTORS_MOT_3,    78,   78, 0, 2);
+                    add_motor(AP_MOTORS_MOT_4,   -78,  -78, 0, 11);
+                    add_motor(AP_MOTORS_MOT_5,    90,   90, 0, 3);
+                    add_motor(AP_MOTORS_MOT_6,   -90,  -90, 0, 10);
+                    add_motor(AP_MOTORS_MOT_7,   107,  107, 0, 5);
+                    add_motor(AP_MOTORS_MOT_8,  -107, -107, 0, 8);
+                    add_motor(AP_MOTORS_MOT_9,   132,  132, 0, 6);
+                    add_motor(AP_MOTORS_MOT_10, -132, -132, 0, 7);
+                    add_motor(AP_MOTORS_MOT_11,    0,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CCW,, 4);
+                    add_motor(AP_MOTORS_MOT_12,    0,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CW,, 9);
+
+                    success = true;
+                    break;
                 default:
                     // dodeca-hexa frame class does not support this frame type
                     break;
