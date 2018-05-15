@@ -618,8 +618,8 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                     add_motor(AP_MOTORS_MOT_8,  -107, -107, 0, 8);
                     add_motor(AP_MOTORS_MOT_9,   132,  132, 0, 6);
                     add_motor(AP_MOTORS_MOT_10, -132, -132, 0, 7);
-                    add_motor(AP_MOTORS_MOT_11,    0,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CCW,, 4);
-                    add_motor(AP_MOTORS_MOT_12,    0,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CW,, 9);
+                    add_motor(AP_MOTORS_MOT_11,    0,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 4);
+                    add_motor(AP_MOTORS_MOT_12,    0,    0, AP_MOTORS_MATRIX_YAW_FACTOR_CW, 9);
 
                     success = true;
                     break;
