@@ -606,7 +606,7 @@ void AP_MotorsMulticopter::output_motor_mask(float thrust, uint8_t mask)
     for (uint8_t i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
         if (motor_enabled[i]) {
             int16_t motor_out;
-            if (mask-1 == i)) {
+            if (mask-1 == i) {
                 motor_out = calc_thrust_to_pwm(thrust);
                 rc_write(i, motor_out);
             } else {
