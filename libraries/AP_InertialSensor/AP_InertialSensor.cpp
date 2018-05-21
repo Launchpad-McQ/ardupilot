@@ -19,9 +19,7 @@
 #include "AP_InertialSensor_LSM9DS1.h"
 #include "AP_InertialSensor_Invensense.h"
 #include "AP_InertialSensor_PX4.h"
-#include "AP_InertialSensor_QURT.h"
 #include "AP_InertialSensor_SITL.h"
-#include "AP_InertialSensor_qflight.h"
 #include "AP_InertialSensor_RST.h"
 #include "AP_InertialSensor_Revo.h"
 
@@ -498,6 +496,7 @@ uint8_t AP_InertialSensor::register_gyro(uint16_t raw_sample_rate_hz,
 
     _gyro_raw_sample_rates[_gyro_count] = raw_sample_rate_hz;
     _gyro_over_sampling[_gyro_count] = 1;
+    _gyro_raw_sampling_multiplier[_gyro_count] = INT16_MAX/radians(2000);
 
     bool saved = _gyro_id[_gyro_count].load();
 
@@ -531,6 +530,7 @@ uint8_t AP_InertialSensor::register_accel(uint16_t raw_sample_rate_hz,
 
     _accel_raw_sample_rates[_accel_count] = raw_sample_rate_hz;
     _accel_over_sampling[_accel_count] = 1;
+    _accel_raw_sampling_multiplier[_accel_count] = INT16_MAX/(16*GRAVITY_MSS);
 
     bool saved = _accel_id[_accel_count].load();
 
@@ -838,10 +838,6 @@ AP_InertialSensor::detect_backends(void)
     ADD_BACKEND(AP_InertialSensor_L3G4200D::probe(*this, hal.i2c_mgr->get_device(HAL_INS_L3G4200D_I2C_BUS, HAL_INS_L3G4200D_I2C_ADDR)));
 #elif HAL_INS_DEFAULT == HAL_INS_MPU9250_I2C
     ADD_BACKEND(AP_InertialSensor_Invensense::probe(*this, hal.i2c_mgr->get_device(HAL_INS_MPU9250_I2C_BUS, HAL_INS_MPU9250_I2C_ADDR)));
-#elif HAL_INS_DEFAULT == HAL_INS_QFLIGHT
-    ADD_BACKEND(AP_InertialSensor_QFLIGHT::detect(*this));
-#elif HAL_INS_DEFAULT == HAL_INS_QURT
-    ADD_BACKEND(AP_InertialSensor_QURT::detect(*this));
 #elif HAL_INS_DEFAULT == HAL_INS_BBBMINI
     ADD_BACKEND(AP_InertialSensor_Invensense::probe(*this, hal.spi->get_device(HAL_INS_MPU9250_NAME)));
     ADD_BACKEND(AP_InertialSensor_Invensense::probe(*this, hal.spi->get_device(HAL_INS_MPU9250_NAME_EXT)));

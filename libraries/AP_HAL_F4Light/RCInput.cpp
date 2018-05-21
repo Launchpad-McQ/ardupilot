@@ -274,7 +274,9 @@ uint16_t RCInput::read(uint8_t ch)
             
             if(!fs_flag) {
                 fs_flag=true;
+#ifdef DEBUG_BUILD
                 printf("\n failsafe! now=%lld last pulse=%lld last change=%lld\n",now, pulse, last);
+#endif
             }
         } else {
             fs_flag=false;
@@ -288,7 +290,9 @@ uint16_t RCInput::read(uint8_t ch)
             if(last_4 < 990 && data >1300 && data < 1700){
                 if(!aibao_fs_flag){
                     aibao_fs_flag=true;
+#ifdef DEBUG_BUILD
                     printf("\nAibao failsafe! ch4=%d ch2=%d\n",last_4, data);
+#endif
                 }
                 data = 901; // to know the source
             } else {
@@ -310,15 +314,6 @@ uint8_t RCInput::read(uint16_t* periods, uint8_t len)
     return _valid_channels;
 }
 
-
-bool RCInput::set_overrides(int16_t *overrides, uint8_t len)
-{
-    bool res = false;
-    for (int i = 0; i < len; i++) {
-        res |= set_override(i, overrides[i]);
-    }
-    return res;
-}
 
 bool RCInput::set_override(uint8_t channel, int16_t override)
 {

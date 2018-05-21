@@ -24,7 +24,6 @@ public:
     }
         
     
-    bool set_overrides(int16_t *overrides, uint8_t len) override;
     bool set_override(uint8_t channel, int16_t override) override;
     void clear_overrides() override;
 
@@ -46,7 +45,7 @@ private:
     uint8_t last_input_source = input_rc_s::RC_INPUT_SOURCE_UNKNOWN;
     const char *input_source_name(uint8_t id) const;
 
-#if HAL_RCINPUT_WITH_AP_RADIO
+#ifdef HAL_RCINPUT_WITH_AP_RADIO
     AP_Radio *radio;
     uint32_t last_radio_us;
 #endif
