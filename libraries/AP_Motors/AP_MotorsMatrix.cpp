@@ -574,6 +574,30 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
             }
             break;
 
+        case MOTOR_FRAME_DECAHEXA: {
+            switch (frame_type) {
+
+                case MOTOR_FRAME_TYPE_DT:
+                    // ocelot10
+                    add_motor(AP_MOTORS_MOT_1,    51,   51, 0, 1);
+                    add_motor(AP_MOTORS_MOT_2,   -51,  -51, 0, 12);
+                    add_motor(AP_MOTORS_MOT_3,    78,   78, 0, 2);
+                    add_motor(AP_MOTORS_MOT_4,   -78,  -78, 0, 11);
+                    add_motor(AP_MOTORS_MOT_5,    90,   90, 0, 3);
+                    add_motor(AP_MOTORS_MOT_6,   -90,  -90, 0, 10);
+                    add_motor(AP_MOTORS_MOT_7,   107,  107, 0, 5);
+                    add_motor(AP_MOTORS_MOT_8,  -107, -107, 0, 8);
+                    add_motor(AP_MOTORS_MOT_9,   132,  132, 0, 6);
+                    add_motor(AP_MOTORS_MOT_10, -132, -132, 0, 7);
+
+                    success = true;
+                    break;
+                default:
+                    // deca-hexa frame class does not support this frame type
+                    break;
+            }}
+            break;
+
         case MOTOR_FRAME_DODECAHEXA: {
             switch (frame_type) {
                 case MOTOR_FRAME_TYPE_PLUS:
