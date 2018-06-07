@@ -503,6 +503,14 @@ bool QuadPlane::setup(void)
         SRV_Channels::set_default_function(CH_11, SRV_Channel::k_motor7);
         AP_Param::set_frame_type_flags(AP_PARAM_FRAME_TRICOPTER);
         break;
+
+    case AP_Motors::MOTOR_FRAME_DECAHEXA:
+        for (uint8_t i=0; i<10; i++) {
+            SRV_Channels::set_aux_channel_default(SRV_Channels::get_motor_function(i), CH_1+i);
+        }
+        break;
+
+
     case AP_Motors::MOTOR_FRAME_TAILSITTER:
         break;
     default:
@@ -576,7 +584,7 @@ bool QuadPlane::setup(void)
 
     // setup the trim of any motors used by AP_Motors so px4io
     // failsafe will disable motors
-    for (uint8_t i=0; i<8; i++) {
+    for (uint8_t i=0; i<10; i++) {
         SRV_Channel::Aux_servo_function_t func = SRV_Channels::get_motor_function(i);
         SRV_Channels::set_failsafe_pwm(func, thr_min_pwm);
     }
@@ -2270,7 +2278,6 @@ void QuadPlane::Log_Write_QControl_Tuning()
     // write multicopter position control message
     pos_control->write_log();
 }
-
 
 /*
   calculate the forward throttle percentage. The forward throttle can

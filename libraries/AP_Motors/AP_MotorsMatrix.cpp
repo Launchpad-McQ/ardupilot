@@ -463,6 +463,16 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                     add_motor(AP_MOTORS_MOT_6,-150, AP_MOTORS_MATRIX_YAW_FACTOR_CW,  4);
                     success = true;
                     break;
+                case MOTOR_FRAME_TYPE_DT:
+                    // ocelot6
+                    add_motor(AP_MOTORS_MOT_1,    61,   61, 0, 1);
+                    add_motor(AP_MOTORS_MOT_2,   -61,  -61, 0, 6);
+                    add_motor(AP_MOTORS_MOT_3,    90,   90, 0, 2);
+                    add_motor(AP_MOTORS_MOT_4,   -90,  -90, 0, 5);
+                    add_motor(AP_MOTORS_MOT_5,    116,   116, 0, 3);
+                    add_motor(AP_MOTORS_MOT_6,   -116,  -116, 0, 4);
+                    success = true;
+                    break;
                 default:
                     // hexa frame class does not support this frame type
                     break;

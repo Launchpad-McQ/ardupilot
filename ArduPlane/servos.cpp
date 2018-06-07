@@ -377,6 +377,15 @@ void Plane::set_servos_controlled(void)
         // manual pass through of throttle while in GUIDED
         SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, channel_throttle->get_control_in_zero_dz());
     } else if (quadplane.in_vtol_mode()) {
+        // ask quadplane code for yaw
+        float yaw_in_Right = quadplane.motors->get_yaw();
+        SRV_Channels::set_output_scaled(SRV_Channel::k_throttleLeft, 
+            constrain_int16(-100 * yaw_in_Right, 0, 100));
+        //input should be in 0-100 (%) and get_yaw() outputs -1 to 1
+        SRV_Channels::set_output_scaled(SRV_Channel::k_throttleRight, 
+            constrain_int16(100 * yaw_in_Right, 0, 100));
+    
+    } else if (quadplane.in_vtol_mode()) {
         // ask quadplane code for forward throttle
         SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, 
             constrain_int16(quadplane.forward_throttle_pct(), min_throttle, max_throttle));
