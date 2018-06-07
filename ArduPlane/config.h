@@ -310,7 +310,7 @@
 
 // use this to disable geo-fencing
 #ifndef GEOFENCE_ENABLED
- # define GEOFENCE_ENABLED ENABLED
+ # define GEOFENCE_ENABLED DISABLED
 #endif
 
 // pwm value on FENCE_CHANNEL to use to enable fenced mode
@@ -343,7 +343,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Parachute release
 #ifndef PARACHUTE
-#define PARACHUTE ENABLED
+#define PARACHUTE DISABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
