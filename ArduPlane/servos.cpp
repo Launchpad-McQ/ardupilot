@@ -377,13 +377,23 @@ void Plane::set_servos_controlled(void)
         // manual pass through of throttle while in GUIDED
         SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, channel_throttle->get_control_in_zero_dz());
     } else if (quadplane.in_vtol_mode()) {
+        SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, 5);
         // ask quadplane code for yaw
         float yaw_in_Right = quadplane.motors->get_yaw();
-        SRV_Channels::set_output_scaled(SRV_Channel::k_throttleLeft, 
-            constrain_int16(-100 * yaw_in_Right, 0, 100));
-        //input should be in 0-100 (%) and get_yaw() outputs -1 to 1
-        SRV_Channels::set_output_scaled(SRV_Channel::k_throttleRight, 
-            constrain_int16(100 * yaw_in_Right, 0, 100));
+        if(yaw_in_Right >0){
+            SRV_Channels::set_output_scaled(SRV_Channel::k_throttleLeft, 
+                constrain_int16(95 * yaw_in_Right +5, 5, 100));
+            //input should be in 0-100 (%) and get_yaw() outputs -1 to 1
+            SRV_Channels::set_output_scaled(SRV_Channel::k_throttleRight, 
+                5);
+        }
+        else{
+            SRV_Channels::set_output_scaled(SRV_Channel::k_throttleLeft, 5);
+            //input should be in 0-100 (%) and get_yaw() outputs -1 to 1
+            SRV_Channels::set_output_scaled(SRV_Channel::k_throttleRight, 
+                constrain_int16(-95 * yaw_in_Right + 5, 5, 100));
+
+        }
     
     } else if (quadplane.in_vtol_mode()) {
         // ask quadplane code for forward throttle
@@ -669,7 +679,9 @@ void Plane::servos_output(void)
     SRV_Channels::cork();
 
     // support twin-engine aircraft
-    servos_twin_engine_mix();
+    if (!quadplane.in_vtol_mode()) {
+        servos_twin_engine_mix();
+    }
 
     // cope with tailsitters
     quadplane.tailsitter_output();
