@@ -589,16 +589,16 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
 
                 case MOTOR_FRAME_TYPE_DT:
                     // ocelot10
-                    add_motor_raw(AP_MOTORS_MOT_1, (167/375)*cosf(radians(52.5+ 90)), (167/186)*cosf(radians(52.5)), 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_2, (167/375)*cosf(radians(-52.5+ 90)), (167/186)*cosf(radians(-52.5)), 0, 2);
-                    add_motor_raw(AP_MOTORS_MOT_3, (261/375)*cosf(radians(76.5+ 90)), (261/186)*cosf(radians(76.5)), 0, 3);
-                    add_motor_raw(AP_MOTORS_MOT_4, (261/375)*cosf(radians(-76.5+ 90)), (261/186)*cosf(radians(-76.5)), 0, 4);
+                    add_motor_raw(AP_MOTORS_MOT_1, (167/375)*cosf(radians(53+ 90)), (167/186)*cosf(radians(53)), 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_2, (167/375)*cosf(radians(-53+ 90)), (167/186)*cosf(radians(-53)), 0, 2);
+                    add_motor_raw(AP_MOTORS_MOT_3, (261/375)*cosf(radians(77+ 90)), (261/186)*cosf(radians(77)), 0, 3);
+                    add_motor_raw(AP_MOTORS_MOT_4, (261/375)*cosf(radians(-77+ 90)), (261/186)*cosf(radians(-77)), 0, 4);
                     add_motor_raw(AP_MOTORS_MOT_5, (375/375)*cosf(radians(87+ 90)), (375/186)*cosf(radians(87)), 0, 5);
                     add_motor_raw(AP_MOTORS_MOT_6, (375/375)*cosf(radians(-87+ 90)), (375/186)*cosf(radians(-87)), 0, 6);
-                    add_motor_raw(AP_MOTORS_MOT_7, (279/375)*cosf(radians(104.4+ 90)), (279/186)*cosf(radians(104.4)), 0, 7);
-                    add_motor_raw(AP_MOTORS_MOT_8, (279/375)*cosf(radians(-104.4+ 90)), (279/186)*cosf(radians(-104.4)), 0, 8);
-                    add_motor_raw(AP_MOTORS_MOT_9, (186/375)*cosf(radians(127.4+ 90)), (186/186)*cosf(radians(127.4)), 0, 9);
-                    add_motor_raw(AP_MOTORS_MOT_10, (186/375)*cosf(radians(-127.4+ 90)), (186/186)*cosf(radians(-127.4)), 0, 10);
+                    add_motor_raw(AP_MOTORS_MOT_7, (279/375)*cosf(radians(104+ 90)), (279/186)*cosf(radians(104)), 0, 7);
+                    add_motor_raw(AP_MOTORS_MOT_8, (279/375)*cosf(radians(-104+ 90)), (279/186)*cosf(radians(-104)), 0, 8);
+                    add_motor_raw(AP_MOTORS_MOT_9, (186/375)*cosf(radians(127+ 90)), (186/186)*cosf(radians(127)), 0, 9);
+                    add_motor_raw(AP_MOTORS_MOT_10, (186/375)*cosf(radians(-127+ 90)), (186/186)*cosf(radians(-127)), 0, 10);
 
                     success = true;
                     break;
