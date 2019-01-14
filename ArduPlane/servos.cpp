@@ -505,7 +505,6 @@ void Plane::servo_output_mixers(void)
 void Plane::servos_twin_engine_mix(void)
 {
     if (quadplane.in_assisted_flight()){
-        SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, 5);
         // ask quadplane code for yaw
         float throttle = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
         float rud_gain = float(plane.g2.rudd_dt_gain) / 100;
