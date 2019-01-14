@@ -600,16 +600,16 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                     //add_motor_raw(AP_MOTORS_MOT_9, (186/375)*cosf(radians(127+ 90)), (186/186)*cosf(radians(127)), 0, 9);
                     //add_motor_raw(AP_MOTORS_MOT_10, (186/375)*cosf(radians(-127+ 90)), (186/186)*cosf(radians(-127)), 0, 10);
                     
-                    add_motor_raw(AP_MOTORS_MOT_1, -1,1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_2, 1,1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_3, -1,1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_4, 1,1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_5, -1,0, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_6, 1,0, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_7, -0.88f,-1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_8, 0.88f,-1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_9, -0.91f,-1, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_10, 0.91f,-1, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_1, -1.0f,    1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_2,  1.0f,    1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_3, -1.0f,    1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_4,  1.0f,    1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_5, -1.0f,    0.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_6,  1.0f,    0.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_7, -0.880f, -1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_8,  0.880f, -1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_9, -0.910f, -1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_10, 0.910f, -1.0f, 0, 1);
 
                     success = true;
                     break;
