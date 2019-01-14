@@ -510,6 +510,7 @@ void Plane::servos_twin_engine_mix(void)
         float throttle = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
         float rud_gain = float(plane.g2.rudd_dt_gain) / 100;
         float yaw_in_Right = rud_gain * quadplane.motors->get_yaw();
+        float throttle_left, throttle_right;
 
         throttle_left  = constrain_float(throttle + 50 * yaw_in_Right, 0, 100)
         throttle_right = constrain_float(throttle - 50 * yaw_in_Right, 0, 100)
