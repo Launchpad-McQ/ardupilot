@@ -591,12 +591,12 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                     // ocelot10
                     add_motor_raw(AP_MOTORS_MOT_1, -1.0f,    1.0f, 0, 1);
                     add_motor_raw(AP_MOTORS_MOT_2,  1.0f,    1.0f, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_3, -1.0f,    1.0f, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_4,  1.0f,    1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_3, -1.0f,    0.950f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_4,  1.0f,    0.950f, 0, 1);
                     add_motor_raw(AP_MOTORS_MOT_5, -1.0f,    0.300f, 0, 1);
                     add_motor_raw(AP_MOTORS_MOT_6,  1.0f,    0.300f, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_7, -0.880f, -1.0f, 0, 1);
-                    add_motor_raw(AP_MOTORS_MOT_8,  0.880f, -1.0f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_7, -0.880f, -0.950f, 0, 1);
+                    add_motor_raw(AP_MOTORS_MOT_8,  0.880f, -0.950f, 0, 1);
                     add_motor_raw(AP_MOTORS_MOT_9, -0.910f, -1.0f, 0, 1);
                     add_motor_raw(AP_MOTORS_MOT_10, 0.910f, -1.0f, 0, 1);
 
