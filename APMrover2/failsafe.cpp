@@ -5,9 +5,10 @@
 
 #include "Rover.h"
 
+#include <stdio.h>
+
 /*
-  our failsafe strategy is to detect main loop lockup and switch to
-  passing inputs straight from the RC inputs to RC outputs.
+  our failsafe strategy is to detect main loop lockup and disarm.
  */
 
 /*
@@ -32,10 +33,10 @@ void Rover::failsafe_check()
         // we have gone at least 0.2 seconds since the main loop
         // ran. That means we're in trouble, or perhaps are in
         // an initialisation routine or log erase. disarm the motors
-        // To-Do: log error to dataflash
+        // To-Do: log error
         if (arming.is_armed()) {
             // disarm motors
-            disarm_motors();
+            arming.disarm(AP_Arming::Method::CPUFAILSAFE);
         }
     }
 }
@@ -43,7 +44,7 @@ void Rover::failsafe_check()
 /*
   called to set/unset a failsafe event.
  */
-void Rover::failsafe_trigger(uint8_t failsafe_type, bool on)
+void Rover::failsafe_trigger(uint8_t failsafe_type, const char* type_str, bool on)
 {
     uint8_t old_bits = failsafe.bits;
     if (on) {
@@ -57,41 +58,51 @@ void Rover::failsafe_trigger(uint8_t failsafe_type, bool on)
     }
     if (failsafe.triggered != 0 && failsafe.bits == 0) {
         // a failsafe event has ended
-        gcs().send_text(MAV_SEVERITY_INFO, "Failsafe ended");
+        gcs().send_text(MAV_SEVERITY_INFO, "%s Failsafe Cleared", type_str);
     }
 
     failsafe.triggered &= failsafe.bits;
 
-    if (failsafe.triggered == 0 &&
-        failsafe.bits != 0 &&
-        millis() - failsafe.start_time > g.fs_timeout * 1000 &&
-        control_mode != &mode_rtl &&
-        control_mode != &mode_hold) {
+    if ((failsafe.triggered == 0) &&
+        (failsafe.bits != 0) &&
+        (millis() - failsafe.start_time > g.fs_timeout * 1000) &&
+        (control_mode != &mode_rtl) &&
+        ((control_mode != &mode_hold || (g2.fs_options & (uint32_t)Failsafe_Options::Failsafe_Option_Active_In_Hold)))) {
         failsafe.triggered = failsafe.bits;
-        gcs().send_text(MAV_SEVERITY_WARNING, "Failsafe trigger 0x%x", static_cast<uint32_t>(failsafe.triggered));
-        switch (g.fs_action) {
-            case 0:
+        gcs().send_text(MAV_SEVERITY_WARNING, "%s Failsafe", type_str);
+
+        // clear rc overrides
+        RC_Channels::clear_overrides();
+
+        if ((control_mode == &mode_auto) &&
+            ((failsafe_type == FAILSAFE_EVENT_THROTTLE && g.fs_throttle_enabled == FS_THR_ENABLED_CONTINUE_MISSION) ||
+             (failsafe_type == FAILSAFE_EVENT_GCS && g.fs_gcs_enabled == FS_GCS_ENABLED_CONTINUE_MISSION))) {
+            // continue with mission in auto mode
+        } else {
+            switch (g.fs_action) {
+            case Failsafe_Action_None:
                 break;
-            case 1:
-                if (!set_mode(mode_rtl, MODE_REASON_FAILSAFE)) {
-                    set_mode(mode_hold, MODE_REASON_FAILSAFE);
+            case Failsafe_Action_RTL:
+                if (!set_mode(mode_rtl, ModeReason::FAILSAFE)) {
+                    set_mode(mode_hold, ModeReason::FAILSAFE);
                 }
                 break;
-            case 2:
-                set_mode(mode_hold, MODE_REASON_FAILSAFE);
+            case Failsafe_Action_Hold:
+                set_mode(mode_hold, ModeReason::FAILSAFE);
                 break;
-            case 3:
-                if (!set_mode(mode_smartrtl, MODE_REASON_FAILSAFE)) {
-                    if (!set_mode(mode_rtl, MODE_REASON_FAILSAFE)) {
-                        set_mode(mode_hold, MODE_REASON_FAILSAFE);
+            case Failsafe_Action_SmartRTL:
+                if (!set_mode(mode_smartrtl, ModeReason::FAILSAFE)) {
+                    if (!set_mode(mode_rtl, ModeReason::FAILSAFE)) {
+                        set_mode(mode_hold, ModeReason::FAILSAFE);
                     }
                 }
                 break;
-            case 4:
-                if (!set_mode(mode_smartrtl, MODE_REASON_FAILSAFE)) {
-                    set_mode(mode_hold, MODE_REASON_FAILSAFE);
+            case Failsafe_Action_SmartRTL_Hold:
+                if (!set_mode(mode_smartrtl, ModeReason::FAILSAFE)) {
+                    set_mode(mode_hold, ModeReason::FAILSAFE);
                 }
                 break;
+            }
         }
     }
 }
@@ -102,21 +113,21 @@ void Rover::handle_battery_failsafe(const char* type_str, const int8_t action)
             case Failsafe_Action_None:
                 break;
             case Failsafe_Action_SmartRTL:
-                if (set_mode(mode_smartrtl, MODE_REASON_FAILSAFE)) {
+                if (set_mode(mode_smartrtl, ModeReason::BATTERY_FAILSAFE)) {
                     break;
                 }
                 FALLTHROUGH;
             case Failsafe_Action_RTL:
-                if (set_mode(mode_rtl, MODE_REASON_FAILSAFE)) {
+                if (set_mode(mode_rtl, ModeReason::BATTERY_FAILSAFE)) {
                     break;
                 }
                 FALLTHROUGH;
             case Failsafe_Action_Hold:
-                set_mode(mode_hold, MODE_REASON_FAILSAFE);
+                set_mode(mode_hold, ModeReason::BATTERY_FAILSAFE);
                 break;
             case Failsafe_Action_SmartRTL_Hold:
-                if (!set_mode(mode_smartrtl, MODE_REASON_FAILSAFE)) {
-                    set_mode(mode_hold, MODE_REASON_FAILSAFE);
+                if (!set_mode(mode_smartrtl, ModeReason::BATTERY_FAILSAFE)) {
+                    set_mode(mode_hold, ModeReason::BATTERY_FAILSAFE);
                 }
                 break;
             case Failsafe_Action_Terminate:
@@ -125,7 +136,7 @@ void Rover::handle_battery_failsafe(const char* type_str, const int8_t action)
                 snprintf(battery_type_str, 17, "%s battery", type_str);
                 g2.afs.gcs_terminate(true, battery_type_str);
 #else
-                disarm_motors();
+                arming.disarm(AP_Arming::Method::BATTERYFAILSAFE);
 #endif // ADVANCED_FAILSAFE == ENABLED
                 break;
         }
@@ -138,6 +149,6 @@ void Rover::handle_battery_failsafe(const char* type_str, const int8_t action)
 void Rover::afs_fs_check(void)
 {
     // perform AFS failsafe checks
-    g2.afs.check(rover.last_heartbeat_ms, rover.g2.fence.get_breaches() != 0, failsafe.last_valid_rc_ms);
+    g2.afs.check(failsafe.last_heartbeat_ms, g2.fence.get_breaches() != 0, failsafe.last_valid_rc_ms);
 }
 #endif

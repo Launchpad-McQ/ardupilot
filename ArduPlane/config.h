@@ -22,12 +22,6 @@
 
 #include "defines.h"
 
-///
-/// DO NOT EDIT THIS INCLUDE - if you want to make a local change, make that
-/// change in your local copy of APM_Config.h.
-///
-#include "APM_Config.h"
-
 // Just so that it's completely clear...
 #define ENABLED                 1
 #define DISABLED                0
@@ -51,12 +45,13 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// FrSky telemetry support
+// Advanced Failsafe support
 //
 
-#ifndef FRSKY_TELEM_ENABLED
-#define FRSKY_TELEM_ENABLED ENABLED
+#ifndef ADVANCED_FAILSAFE
+ # define ADVANCED_FAILSAFE ENABLED
 #endif
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Optical flow sensor support
@@ -104,22 +99,22 @@
 #endif
 
 #if !defined(FLIGHT_MODE_1)
- # define FLIGHT_MODE_1                  RTL
+ # define FLIGHT_MODE_1                  Mode::Number::RTL
 #endif
 #if !defined(FLIGHT_MODE_2)
- # define FLIGHT_MODE_2                  RTL
+ # define FLIGHT_MODE_2                  Mode::Number::RTL
 #endif
 #if !defined(FLIGHT_MODE_3)
- # define FLIGHT_MODE_3                  FLY_BY_WIRE_A
+ # define FLIGHT_MODE_3                  Mode::Number::FLY_BY_WIRE_A
 #endif
 #if !defined(FLIGHT_MODE_4)
- # define FLIGHT_MODE_4                  FLY_BY_WIRE_A
+ # define FLIGHT_MODE_4                  Mode::Number::FLY_BY_WIRE_A
 #endif
 #if !defined(FLIGHT_MODE_5)
- # define FLIGHT_MODE_5                  MANUAL
+ # define FLIGHT_MODE_5                  Mode::Number::MANUAL
 #endif
 #if !defined(FLIGHT_MODE_6)
- # define FLIGHT_MODE_6                  MANUAL
+ # define FLIGHT_MODE_6                  Mode::Number::MANUAL
 #endif
 
 
@@ -145,22 +140,6 @@
  # define GROUND_START_DELAY             0
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// ENABLE ELEVON_MIXING
-//
-#ifndef ELEVON_MIXING
- # define ELEVON_MIXING          DISABLED
-#endif
-#ifndef ELEVON_REVERSE
- # define ELEVON_REVERSE     DISABLED
-#endif
-#ifndef ELEVON_CH1_REVERSE
- # define ELEVON_CH1_REVERSE     DISABLED
-#endif
-#ifndef ELEVON_CH2_REVERSE
- # define ELEVON_CH2_REVERSE     DISABLED
-#endif
-
 #ifndef DSPOILR_RUD_RATE_DEFAULT
  #define DSPOILR_RUD_RATE_DEFAULT 100
 #endif
@@ -168,7 +147,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // CAMERA TRIGGER AND CONTROL
 //
-// uses 1182 bytes of memory
 #ifndef CAMERA
  # define CAMERA         ENABLED
 #endif
@@ -176,7 +154,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // MOUNT (ANTENNA OR CAMERA)
 //
-// uses 7726 bytes of memory on 2560 chips (all options are enabled)
 #ifndef MOUNT
 #define MOUNT          ENABLED
 #endif
@@ -262,7 +239,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-// Dataflash logging control
+// Logging control
 //
 
 #ifndef LOGGING_ENABLED
@@ -287,18 +264,6 @@
  # define ALT_HOLD_HOME 100
 #endif
 #define ALT_HOLD_HOME_CM ALT_HOLD_HOME*100
-
-#ifndef USE_CURRENT_ALT
- # define USE_CURRENT_ALT FALSE
-#endif
-
-#ifndef INVERTED_FLIGHT_PWM
- # define INVERTED_FLIGHT_PWM 1750
-#endif
-
-#ifndef PX4IO_OVERRIDE_PWM
- # define PX4IO_OVERRIDE_PWM 1750
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // Developer Items
@@ -333,11 +298,7 @@
 #endif
 
 #ifndef HIL_SUPPORT
-#if HAL_MINIMIZE_FEATURES
-# define HIL_SUPPORT DISABLED
-#else
-# define HIL_SUPPORT ENABLED
-#endif
+# define HIL_SUPPORT !HAL_MINIMIZE_FEATURES
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -349,27 +310,21 @@
 //////////////////////////////////////////////////////////////////////////////
 // Payload Gripper
 #ifndef GRIPPER_ENABLED
- #if HAL_MINIMIZE_FEATURES
-  # define GRIPPER_ENABLED DISABLED
- #else 
-  # define GRIPPER_ENABLED ENABLED
- #endif
-#endif
-
-#if CONFIG_HAL_BOARD == HAL_BOARD_PX4 && !defined(CONFIG_ARCH_BOARD_PX4FMU_V4)
-# define HAVE_PX4_MIXER 1
-#else
-# define HAVE_PX4_MIXER 0
+  #define GRIPPER_ENABLED !HAL_MINIMIZE_FEATURES
 #endif
 
 #ifndef STATS_ENABLED
  # define STATS_ENABLED ENABLED
 #endif
 
-#ifndef DEVO_TELEM_ENABLED
-#if HAL_MINIMIZE_FEATURES
- #define DEVO_TELEM_ENABLED DISABLED
-#else
- #define DEVO_TELEM_ENABLED ENABLED
+#ifndef OSD_ENABLED
+ #define OSD_ENABLED DISABLED
 #endif
+
+#ifndef SOARING_ENABLED
+ #define SOARING_ENABLED !HAL_MINIMIZE_FEATURES
+#endif
+
+#ifndef LANDING_GEAR_ENABLED
+ #define LANDING_GEAR_ENABLED !HAL_MINIMIZE_FEATURES
 #endif

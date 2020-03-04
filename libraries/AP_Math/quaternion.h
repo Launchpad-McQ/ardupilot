@@ -21,6 +21,7 @@
 #if MATH_CHECK_INDEXES
 #include <assert.h>
 #endif
+#include <math.h>
 
 class Quaternion {
 public:
@@ -56,7 +57,7 @@ public:
     }
 
     // check if any elements are NAN
-    bool        is_nan(void) const
+    bool        is_nan(void) const WARN_IF_UNUSED
     {
         return isnan(q1) || isnan(q2) || isnan(q3) || isnan(q4);
     }
@@ -140,4 +141,7 @@ public:
     Quaternion operator*(const Quaternion &v) const;
     Quaternion &operator*=(const Quaternion &v);
     Quaternion operator/(const Quaternion &v) const;
+
+    // angular difference between quaternions
+    Quaternion angular_difference(const Quaternion &v) const;
 };

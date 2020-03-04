@@ -9,25 +9,27 @@
 class AP_Arming_Rover : public AP_Arming
 {
 public:
-    AP_Arming_Rover(const AP_AHRS &ahrs_ref, Compass &compass,
-                    const AP_BattMonitor &battery, const AC_Fence &fence)
-        : AP_Arming(ahrs_ref, compass, battery),
-          _fence(fence)
-    {
-    }
+
+    AP_Arming_Rover() : AP_Arming() { }
 
     /* Do not allow copies */
     AP_Arming_Rover(const AP_Arming_Rover &other) = delete;
     AP_Arming_Rover &operator=(const AP_Arming_Rover&) = delete;
 
     bool pre_arm_checks(bool report) override;
-    bool pre_arm_rc_checks(const bool display_failure);
+    bool arm_checks(AP_Arming::Method method) override;
+    bool rc_calibration_checks(const bool display_failure) override;
     bool gps_checks(bool display_failure) override;
 
-protected:
-    bool fence_checks(bool report);
-    bool proximity_check(bool report);
+    bool disarm(AP_Arming::Method method) override;
+    bool arm(AP_Arming::Method method, bool do_arming_checks=true) override;
 
-private:
-    const AC_Fence& _fence;
+    void update_soft_armed();
+
+protected:
+    // the following check functions do not call into AP_Arming
+    bool oa_check(bool report);
+    bool parameter_checks(bool report);
+    bool mode_checks(bool report);
+
 };
